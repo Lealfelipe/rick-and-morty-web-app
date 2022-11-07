@@ -1,7 +1,25 @@
 from flask import Flask
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
+
 db = SQLAlchemy()
+login_manager = LoginManager()
+
+
+@login_manager.user_loader
+def user_loader(user_id):
+    from .model import User
+
+    users = {
+        "Lucasvenezian@gmail.com": User(
+            name="Lucas Venezian Povoa",
+            email="Lucasvenezian@gmail.com",
+            password="12345678",
+            birthdate="1990-02-01"
+        )
+    }
+    return users.get(user_id)
 
 
 def create_app():
@@ -16,6 +34,7 @@ def create_app():
     application.register_blueprint(character_blueprint)
 
     db.init_app(application)
+    login_manager.init_app(application)
 
     if application.config["TESTING"]:
         with application.app_context():

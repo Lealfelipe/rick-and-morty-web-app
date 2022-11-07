@@ -1,6 +1,24 @@
 from datetime import datetime
 
+from flask_login import UserMixin
+
 from main import db
+
+
+class User(UserMixin):
+    name: str = None
+    email: str = None
+    password: str = None
+    birthdate: str = None
+
+    def __init__(self, name, email, password, birthdate):
+        self.name = name
+        self.email = email
+        self.password = password
+        self.birthdate = birthdate
+
+    def get_id(self):
+        return self.email
 
 
 class Character(db.Model):

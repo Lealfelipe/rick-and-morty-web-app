@@ -1,4 +1,6 @@
 from flask import render_template
+from flask_login import login_required
+
 from character import character_blueprint
 from character.forms import CharacterForm
 from main import db
@@ -6,10 +8,12 @@ from model import Character
 
 
 @character_blueprint.route("/", methods=["GET"])
+@login_required
 def list_characters():
     return render_template(
         template_name_or_list="character/list.html",
         characters=Character.query.all())
+
 
 @character_blueprint.route("/new", methods=["GET", "POST"])
 def new_character():
